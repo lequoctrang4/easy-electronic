@@ -30,8 +30,9 @@ const productRoute =(app) =>{
     router.get('/getphone/id/:id', productController.getPhoneById);
     router.get('/getphone/dev/:dev', productController.getPhoneByDeveloper);
     router.post('/addphone', upload.array('image', 7), productController.addPhone);
-    
-    
+    router.put('/editPhoneById/:id',upload.any(), productController.editPhoneById);
+    router.delete('/deletePhoneById/:id', productController.deletePhoneById);
+
     return app.use('/product', router);
 }
 
