@@ -267,8 +267,12 @@ let deleteWatchById = async (id) => {
     return 'sucesss';
 }
 
-let searchItem = async (id) => {
-    let [product] = await pool.execute(`select * from product where id = ? or name = ? or hang_sx = ?`, [id, id, id]);
+let searchItem = async (param) => {
+    if(param.toLowerCase() == "laptop") return await getAllLaptop();
+    if(param.toLowerCase() == "tablet") return await getAllTablet();
+    if(param.toLowerCase() == "phone") return await getAllPhone();
+    if(param.toLowerCase() == "watch") return await getAllWatch();
+    let [product] = await pool.execute(`select * from product where id = ? or name = ? or hang_sx = ?`, [param, param, param]);
     return product; 
 };
 module.exports = {

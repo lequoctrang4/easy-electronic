@@ -54,7 +54,7 @@ const productRoute =(app) =>{
     router.post('/addWatch', upload.array('image', 7), productController.addWatch);
     router.put('/editWatch/id/:id', upload.array('image', 7), productController.editWatchById);
     router.delete('/deleteWatch/id/:id', productController.deleteWatchById);
-    
+    //search
     router.get('/searchItem/param/:param', productController.searchItem);
     
     return app.use('/product', router);
