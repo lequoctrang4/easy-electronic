@@ -1,11 +1,14 @@
 import express from 'express';
 import configViewEngine from './configs/viewEngine';
-import productRoute from './route/product';
+import productRoute from './routes/product';
+import cors from 'cors';
 require('dotenv').config();
 
 
 const app = express()
 const port = process.env.PORT || 3000; //Nếu phía trước bị undifined thì gán
+
+app.use(cors());
 
 //Middleware
 app.use((req, res, next) =>{

@@ -1,31 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Mar 19, 2023 at 06:48 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `phone_store`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer`
---
 
 CREATE TABLE `customer` (
   `customer_id` varchar(100) NOT NULL,
@@ -34,16 +6,13 @@ CREATE TABLE `customer` (
   `phone_number` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `image` varchar(100) NOT NULL,
+  `registryAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_login` datetime NOT NULL,
   `address_part1` varchar(100) NOT NULL,
   `address_part2` varchar(100) NOT NULL,
   `address_part3` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `laptop`
---
 
 CREATE TABLE `laptop` (
   `id` varchar(100) NOT NULL,
@@ -53,16 +22,6 @@ CREATE TABLE `laptop` (
   `camera` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `laptop`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders`
---
 
 CREATE TABLE `orders` (
   `order_id` varchar(100) NOT NULL,
@@ -70,18 +29,13 @@ CREATE TABLE `orders` (
   `voucher_id` varchar(100) NOT NULL,
   `payment_id` varchar(100) NOT NULL,
   `shipping_id` varchar(100) NOT NULL,
-  `time_order` datetime NOT NULL,
+  `time_order` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `time_get` datetime NOT NULL,
-  `status` varchar(100) NOT NULL,
+  `status` varchar(100) NOT NULL check ("Confirm" or "Delivery" or "Success"),
   `tong_tien` int(100) NOT NULL,
   `ghi_chu` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `order_detail`
---
 
 CREATE TABLE `order_detail` (
   `detail_id` varchar(100) NOT NULL,
@@ -90,33 +44,18 @@ CREATE TABLE `order_detail` (
   `count` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `own_voucher`
---
 
 CREATE TABLE `own_voucher` (
   `voucher_id` varchar(100) NOT NULL,
   `customer_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `payment`
---
 
 CREATE TABLE `payment` (
   `payment_id` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `phone`
---
 
 CREATE TABLE `phone` (
   `id` varchar(100) NOT NULL,
@@ -126,17 +65,6 @@ CREATE TABLE `phone` (
   `sim` varchar(50) NOT NULL DEFAULT 'None',
   `mang_di_dong` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `phone`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product`
---
 
 CREATE TABLE `product` (
   `id` varchar(100) NOT NULL,
@@ -161,35 +89,16 @@ CREATE TABLE `product` (
   `cong_suat_sac` varchar(100) NOT NULL,
   `bluetooth` varchar(100) DEFAULT NULL,
   `wifi` varchar(100) NOT NULL,
-  `bao_hanh` varchar(50) NOT NULL DEFAULT 'None'
+  `bao_hanh` varchar(50) NOT NULL DEFAULT 'None',
+  `year` varchar(30) NOT NULL DEFAULT 'Comming Soon'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `product`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_image`
---
 
 CREATE TABLE `product_image` (
   `product_id` varchar(100) NOT NULL,
   `image` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `product_image`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `review`
---
 
 CREATE TABLE `review` (
   `product_id` varchar(100) NOT NULL,
@@ -199,29 +108,12 @@ CREATE TABLE `review` (
   `content` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `shipping_method`
---
-
 CREATE TABLE `shipping_method` (
   `shipping_id` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `cost` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `shipping_method`
---
-
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `staff`
---
 
 CREATE TABLE `staff` (
   `user_id` varchar(100) NOT NULL,
@@ -229,14 +121,10 @@ CREATE TABLE `staff` (
   `password` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `registryAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_login` datetime NOT NULL,
   `phone_number` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tablet`
---
 
 CREATE TABLE `tablet` (
   `id` varchar(100) NOT NULL,
@@ -247,11 +135,6 @@ CREATE TABLE `tablet` (
   `mang_di_dong` varchar(50) NOT NULL DEFAULT 'None'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `voucher`
---
 
 CREATE TABLE `voucher` (
   `voucher_id` varchar(100) NOT NULL,
@@ -259,12 +142,6 @@ CREATE TABLE `voucher` (
   `sale_percent` varchar(50) NOT NULL,
   `expired` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `watch`
---
 
 CREATE TABLE `watch` (
   `id` varchar(100) NOT NULL,
@@ -277,26 +154,13 @@ CREATE TABLE `watch` (
   `chat_lieu_dh` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `customer`
---
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`customer_id`);
 
---
--- Indexes for table `laptop`
---
 ALTER TABLE `laptop`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
---
--- Indexes for table `orders`
---
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
   ADD KEY `customer_id` (`customer_id`),
@@ -304,149 +168,83 @@ ALTER TABLE `orders`
   ADD KEY `payment_id` (`payment_id`),
   ADD KEY `shipping_id` (`shipping_id`);
 
---
--- Indexes for table `order_detail`
---
 ALTER TABLE `order_detail`
   ADD PRIMARY KEY (`detail_id`),
   ADD KEY `order_id` (`order_id`),
   ADD KEY `product_id` (`product_id`);
 
---
--- Indexes for table `own_voucher`
---
 ALTER TABLE `own_voucher`
   ADD PRIMARY KEY (`voucher_id`,`customer_id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `voucher_id` (`voucher_id`);
 
---
--- Indexes for table `payment`
---
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`payment_id`);
 
---
--- Indexes for table `phone`
---
 ALTER TABLE `phone`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
---
--- Indexes for table `product`
---
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `product_image`
---
 ALTER TABLE `product_image`
   ADD PRIMARY KEY (`product_id`,`image`),
   ADD KEY `product_id` (`product_id`);
 
---
--- Indexes for table `review`
---
 ALTER TABLE `review`
   ADD PRIMARY KEY (`product_id`,`customer_id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `product_id` (`product_id`);
 
---
--- Indexes for table `shipping_method`
---
 ALTER TABLE `shipping_method`
   ADD PRIMARY KEY (`shipping_id`);
 
---
--- Indexes for table `staff`
---
 ALTER TABLE `staff`
   ADD PRIMARY KEY (`user_id`);
 
---
--- Indexes for table `tablet`
---
 ALTER TABLE `tablet`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
---
--- Indexes for table `voucher`
---
 ALTER TABLE `voucher`
   ADD PRIMARY KEY (`voucher_id`);
 
---
--- Indexes for table `watch`
---
 ALTER TABLE `watch`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `laptop`
---
 ALTER TABLE `laptop`
   ADD CONSTRAINT `laptop_ibfk_1` FOREIGN KEY (`id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `laptop` ADD `chat_lieu` VARCHAR(100) NOT NULL AFTER `id`;
 
---
--- Constraints for table `orders`
---
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`voucher_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`)  ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_4` FOREIGN KEY (`shipping_id`) REFERENCES `shipping_method` (`shipping_id`) ON UPDATE CASCADE;
 
---
--- Constraints for table `order_detail`
---
 ALTER TABLE `order_detail`
   ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `own_voucher`
---
 ALTER TABLE `own_voucher`
   ADD CONSTRAINT `own_voucher_ibfk_1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`voucher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `own_voucher_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `phone`
---
 ALTER TABLE `phone`
   ADD CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `product_image`
---
 ALTER TABLE `product_image`
   ADD CONSTRAINT `product_image_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `review`
---
 ALTER TABLE `review`
   ADD CONSTRAINT `review_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `tablet`
---
 ALTER TABLE `tablet`
   ADD CONSTRAINT `tablet_ibfk_1` FOREIGN KEY (`id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Constraints for table `watch`
---
 ALTER TABLE `watch`
   ADD CONSTRAINT `watch_ibfk_1` FOREIGN KEY (`id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 INSERT INTO `product` (`id`, `name`, `cpu`, `ram`, `rom`, `color`, `hang_sx`, `description`, `price`, `discount_percent`, `hdh`, `type_hdh`, `size_screen`, `do_phan_giai`, `tech_screen`, `tan_so_quet`, `kich_thuoc_tb`, `weight`, `dung_luong_pin`, `cong_suat_sac`, `bluetooth`, `wifi`, `bao_hanh`) VALUES
@@ -468,8 +266,3 @@ INSERT INTO `phone` (`id`, `chat_lieu`, `camera_truoc`, `camera_sau`, `sim`, `ma
 INSERT INTO `shipping_method` (`shipping_id`, `name`, `cost`) VALUES
 ('1', 'Grab', 50000),
 ('2', 'Be', 45000);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
