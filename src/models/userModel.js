@@ -1,6 +1,10 @@
 import pool from "../configs/connectDB";
-let getUserByPhone = async (phone_number) => {
-    let [result] = await pool.execute(`select * from user where phone_number = ?`, [phone_number]);
+let getUserByPhone = async (phone) => {
+    let [result] = await pool.execute(`select * from user where phone = ?`, [phone]);
+    return result;
+};
+let getUserByEmail = async (email) => {
+    let [result] = await pool.execute(`select * from user where email = ?`, [email]);
     return result;
 };
 
@@ -10,8 +14,8 @@ let getUserById = async (id) => {
 };
 let createUser = async (phone, password, email, name) => {
     try {
-        await pool.execute(`insert into user (name, bdate, gender, phone_number, email, password, register_at, isAdmin) 
-        VALUES (?,NULL,'Khác',?,?,?,CURRENT_DATE,0)`, [name, phone, email, password ]);
+        await pool.execute(`insert into user (name, email, phone, password, passwordChangedAt, registryAt) 
+        VALUES (?,?,?,?, CURRENT_TIME, CURRENT_TIME)`, [name, email, phone, password ]);
         return "success";
     } catch (error) {
         return error;
@@ -25,10 +29,10 @@ let setAvatar = async (avatar, id) =>{
         return error;
     }
 };
-let editProfile = async (name, bdate, gender, phone_number, email, id) =>{
+let editProfile = async (name, bdate, gender, phone, email, id) =>{
     try {
-        await pool.execute(`update user set name = ?, bdate =?, gender = ?, phone_number = ?, email =? where id = ?`,
-            [name, bdate, gender, phone_number, email, id]);
+        await pool.execute(`update user set name = ?, bdate =?, gender = ?, phone = ?, email =? where id = ?`,
+            [name, bdate, gender, phone, email, id]);
         return "success";
     } catch (error) {
         return error;
@@ -43,5 +47,6 @@ let changePassword = async (password, id) => {
     }
 };
 module.exports ={
-    getUserByPhone, createUser, setAvatar, getUserById, editProfile, changePassword
+    getUserByPhone, createUser, setAvatar, getUserById, editProfile, changePassword,
+    getUserByEmail
 }

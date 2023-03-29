@@ -9,7 +9,7 @@ function isValidDate(value) {
 
 function isValidEmail(value) {
   let emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-  let valid = emailRegex.test(email);
+  let valid = emailRegex.test(value);
   return value && valid;
 }
 

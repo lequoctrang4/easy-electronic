@@ -23,11 +23,11 @@ create table if not exists `product` (
 CREATE TABLE if not exists`user` (
   `id` int PRIMARY KEY auto_increment,
   `name` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL UNIQUE,
   `phone` varchar(50) NOT NULL UNIQUE,
   `password` varchar(250) NOT NULL,
   `avatar` varchar(50),
-  `passwordChangedAt` date not null,
+  `passwordChangedAt` datetime not null,
   `registryAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_login` datetime,
   `address` varchar(100)

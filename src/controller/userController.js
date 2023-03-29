@@ -4,16 +4,28 @@ const fs = require('fs');
 const {sendEmail} = require("../utils/mailer");
 const { hash, compare } = require('bcryptjs');
 import { createJSONToken, parseJwt} from '../utils/auth';
+
 let login = async (req, res) => {
     let UserName;
-    const {phone, password} = req.body;
+    const {email, phone, password} = req.body;
     let errors = {};
-    if(!validation.isValidText(phone, 10))
-        errors.phone = 'Định dạng số điện thoại không đúng!'
+    if (phone !== undefined) {
+        if(!validation.isValidText(phone, 10))
+            errors.phone = 'Định dạng số điện thoại không đúng!'
+        else{
+            UserName = await userModel.getUserByPhone(phone);
+            if (Object.keys(UserName).length === 0)
+                return res.status(404).json({message: "Số điện thoại không tồn tại!"})
+        }
+    }
     else{
-        UserName = await userModel.getUserByPhone(phone);
-        if (Object.keys(UserName).length === 0)
-            return res.status(404).json({message: "Số điện thoại không tồn tại!"})
+        if(!validation.isValidEmail(email, 10))
+            errors.email = 'Định dạng email không đúng!'
+        else{
+            UserName = await userModel.getUserByEmail(email);
+            if (Object.keys(UserName).length === 0)
+                return res.status(404).json({message: "Email không tồn tại!"})
+        }
     }
     if(!validation.isValidText(password, 6))
         errors.password = 'Mật khẩu phải chứa ít nhất 6 ký tự!'
@@ -21,18 +33,20 @@ let login = async (req, res) => {
         if (!await compare(password, UserName[0].password))
             return res.status(422).json({message: "Nhập sai mật khẩu! Vui lòng nhập lại!"})
     }
+
     if(Object.keys(errors).length > 0){
         return res.status(400).json(errors);
     }
-    const token = createJSONToken(UserName[0].id,);
+    const token = createJSONToken(UserName[0].id, UserName[0].email, UserName[0].phone, UserName[0].password);
     return res.status(200).json({token});
 };
+
 let signin = async (req, res) => {
-    const {phone, email, password, rePassword, name} = req.body;
+    const {phone, email, password, confirmPassword, name} = req.body;
     let errors = {};
     let UserName;
-    if(!validation.isValidText(phone, 6))
-        errors.username = 'Số điện thoại chỉ có đúng 10 kí tự'
+    if(!validation.isValidText(phone, 10))
+        errors.username = 'Số điện thoại không đúng!'
     else{
         UserName = await userModel.getUserByPhone(phone);
         if (Object.keys(UserName).length === 1)
@@ -40,12 +54,17 @@ let signin = async (req, res) => {
     }
     if (!validation.isValidEmail(email))
         errors.email = 'Nhập sai định dạng email!';
+    else{
+        UserName = await userModel.getUserByEmail(email);
+        if (Object.keys(UserName).length === 1)
+            return res.status(404).json({message: "Email đã tồn tại!"})
+    }
     if (!validation.isValidText(name, 6))
         errors.email = 'Tên quá ngắn, vui lòng nhập đầy đủ!';
     if(!validation.isValidText(password, 6))
         errors.password = 'Mật khẩu phải chứa ít nhất 6 ký tự!'
     else{
-        if (password !== rePassword)
+        if (password !== confirmPassword)
         return res.status(400).json({message: "Mật khẩu xác nhận không đúng!"})
     }
     if(Object.keys(errors).length > 0){
