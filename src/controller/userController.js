@@ -36,8 +36,8 @@ let signIn = async (req, res) => {
     if(Object.keys(errors).length > 0){
         return res.status(400).json(errors);
     }
-    let result = await userModel.setLastLogin(User[0].id);
-    const token = createJSONToken(User[0].id);
+    await userModel.setLastLogin(User[0].id);
+    const token = createJSONToken(User[0]);
     return res.status(200).json({ user: User[0], token});
 };
 

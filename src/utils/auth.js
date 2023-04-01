@@ -5,7 +5,7 @@ const KEY = 'supersecret123';
 
 
 export function createJSONToken(id) {
-  return sign({ id }, KEY, { expiresIn: '1d' });
+  return sign(id, KEY, { expiresIn: '1d' });
 }
 
 export function validateJSONToken(token) {
