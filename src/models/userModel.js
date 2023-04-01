@@ -29,10 +29,10 @@ let setAvatar = async (avatar, id) =>{
         return error;
     }
 };
-let editProfile = async (name, bdate, gender, phone, email, id) =>{
+let editProfile = async (name, phone, email, address, id) =>{
     try {
-        await pool.execute(`update user set name = ?, bdate =?, gender = ?, phone = ?, email =? where id = ?`,
-            [name, bdate, gender, phone, email, id]);
+        await pool.execute(`update user set name = ?, phone =?, email = ?, address = ? where id = ?`,
+            [name, phone, email, address, id]);
         return "success";
     } catch (error) {
         return error;
@@ -46,7 +46,16 @@ let changePassword = async (password, id) => {
         return error;
     }
 };
+
+let setLastLogin = async (id) => {
+    try {
+        await pool.execute(`update user set last_login = CURRENT_TIME where id = ?`,[id]);
+        return "success";
+    } catch (error) {
+        return error;
+    }
+};
 module.exports ={
     getUserByPhone, createUser, setAvatar, getUserById, editProfile, changePassword,
-    getUserByEmail
+    getUserByEmail, setLastLogin
 }

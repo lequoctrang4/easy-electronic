@@ -5,58 +5,58 @@ const {sendEmail} = require("../utils/mailer");
 const { hash, compare } = require('bcryptjs');
 import { createJSONToken, parseJwt} from '../utils/auth';
 
-let login = async (req, res) => {
-    let UserName;
+let signIn = async (req, res) => {
+    let User;
     const {email, phone, password} = req.body;
     let errors = {};
     if (phone !== undefined) {
-        if(!validation.isValidText(phone, 10))
+        if(!validation.isValidPhone(phone))
             errors.phone = 'Định dạng số điện thoại không đúng!'
         else{
-            UserName = await userModel.getUserByPhone(phone);
-            if (Object.keys(UserName).length === 0)
+            User = await userModel.getUserByPhone(phone);
+            if (Object.keys(User).length === 0)
                 return res.status(404).json({message: "Số điện thoại không tồn tại!"})
         }
     }
     else{
-        if(!validation.isValidEmail(email, 10))
+        if(!validation.isValidEmail(email))
             errors.email = 'Định dạng email không đúng!'
         else{
-            UserName = await userModel.getUserByEmail(email);
-            if (Object.keys(UserName).length === 0)
+            User = await userModel.getUserByEmail(email);
+            if (Object.keys(User).length === 0)
                 return res.status(404).json({message: "Email không tồn tại!"})
         }
     }
     if(!validation.isValidText(password, 6))
         errors.password = 'Mật khẩu phải chứa ít nhất 6 ký tự!'
     else{
-        if (!await compare(password, UserName[0].password))
+        if (!Object.keys(errors).length && !await compare(password, User[0].password))
             return res.status(422).json({message: "Nhập sai mật khẩu! Vui lòng nhập lại!"})
     }
-
     if(Object.keys(errors).length > 0){
         return res.status(400).json(errors);
     }
-    const token = createJSONToken(UserName[0].id, UserName[0].email, UserName[0].phone, UserName[0].password);
-    return res.status(200).json({token});
+    let result = await userModel.setLastLogin(User[0].id);
+    const token = createJSONToken(User[0].id);
+    return res.status(200).json({ user: User[0], token});
 };
 
-let signin = async (req, res) => {
+let signUp = async (req, res) => {
     const {phone, email, password, confirmPassword, name} = req.body;
     let errors = {};
-    let UserName;
-    if(!validation.isValidText(phone, 10))
-        errors.username = 'Số điện thoại không đúng!'
+    let User;
+    if(!validation.isValidPhone(phone))
+        errors.User = 'Số điện thoại không đúng!'
     else{
-        UserName = await userModel.getUserByPhone(phone);
-        if (Object.keys(UserName).length === 1)
+        User = await userModel.getUserByPhone(phone);
+        if (Object.keys(User).length === 1)
             return res.status(404).json({message: "Số điện thoại đã tồn tại!"})
     }
     if (!validation.isValidEmail(email))
         errors.email = 'Nhập sai định dạng email!';
     else{
-        UserName = await userModel.getUserByEmail(email);
-        if (Object.keys(UserName).length === 1)
+        User = await userModel.getUserByEmail(email);
+        if (Object.keys(User).length === 1)
             return res.status(404).json({message: "Email đã tồn tại!"})
     }
     if (!validation.isValidText(name, 6))
@@ -111,19 +111,42 @@ let getProfile = async (req, res) => {
     const authFragments = req.headers.authorization.split(' ');
     let {id} = parseJwt(authFragments[1]);    
     let result = await userModel.getUserById(id);
+    if (result.length === 0) return res.status(404).json({message: "Invalid"});
     return res.status(200).json({
         name: result[0].name,
-        bdate: result[0].bdate,
-        gender: result[0].gender,
-        phone: result[0].phone_number,
-        email: result[0].email
+        phone: result[0].phone,
+        email: result[0].email,
+        address: result[0].address
     });
 };
 let editProfile = async (req, res) => {
     const authFragments = req.headers.authorization.split(' ');
     let {id} = parseJwt(authFragments[1]);
-    let {name, bdate, gender, phone, email} = req.body;
-    let person = await userModel.editProfile(name, bdate, gender, phone, email, id);
+    let {name, phone, email, address} = req.body;
+    let errors = {};
+    let User;
+    let profile = (await userModel.getUserById(id))[0];
+    if(!validation.isValidPhone(phone))
+        errors.User = 'Số điện thoại không đúng!'
+    else{
+        User = await userModel.getUserByPhone(phone);
+        if (Object.keys(User).length === 1 && phone !== profile.phone)
+            return res.status(404).json({message: "Số điện thoại đã tồn tại!"})
+    }
+    if (!validation.isValidEmail(email))
+        errors.email = 'Nhập sai định dạng email!';
+    else{
+        User = await userModel.getUserByEmail(email);
+        if (Object.keys(User).length === 1 && email !== profile.email)
+            return res.status(404).json({message: "Email đã tồn tại!"})
+    }
+    if (!validation.isValidText(name, 6))
+        errors.email = 'Tên quá ngắn, vui lòng nhập đầy đủ!';
+    if(Object.keys(errors).length > 0){
+        return res.status(400).json(errors);
+    }
+
+    let person = await userModel.editProfile(name, phone, email, address, id);
     if (person !== "success")
         return res.status(400).json({message: person});
     return res.status(200).json({
@@ -151,8 +174,6 @@ let changePassword = async (req, res) => {
     return res.status(200).json({
         message: result
     });
-    
-
 };
 
 let forgetPassword = async (req, res) =>{
@@ -167,14 +188,13 @@ let forgetPassword = async (req, res) =>{
         return res.status(404).json({message: "Không tìm thấy người dùng"})
     let pass = Math.floor(Math.random() * 110000000000);
     const hashedPw = await hash(pass.toString(), 12);
-    // console.log(pass);
     let rs = userModel.changePassword(hashedPw, user.id);
-    sendEmail(email, "Reset password Smart Farm System", "View", "<h1>Pass của bạn là: 12345678</h1>");
+    sendEmail(email, "Reset password Easy Electronic", "View", "<h1>Pass mới của bạn là: " + pass + "</h1>");
     return res.status(200).json({
         message: "success"
     });
 };
 module.exports = {
-    login, signin, getProfile, getAvatar, setAvatar, editProfile, changePassword,
+    signIn, signUp, getProfile, getAvatar, setAvatar, editProfile, changePassword,
     forgetPassword
 }
