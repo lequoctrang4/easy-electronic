@@ -3,37 +3,47 @@ import path from 'path';
 import productController from '../controller/productController'
 import multer from 'multer';
 import appRoot from "app-root-path";
+import {checkAuthAdminMiddleware} from "../utils/auth";
+
 let router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, appRoot + "/src/public/image/product");
+        cb(null, appRoot + "/src/public/html");
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        cb(null, req.body.code + path.extname(file.originalname));
     }
 });
 
 const imageFilter = function (req, file, cb) {
     // Accept images only
-    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+    if (!file.originalname.match(/\.(html|HTML)$/)) {
         req.fileValidationError = 'Only image files are allowed!';
     }
     cb(null, true);
 };
 
 let upload = multer({ storage: storage, fileFilter: imageFilter });
-upload.any();
 
 const productRoute =(app) =>{
     //phone
+    router.get('/getProductById/:id', productController.getProductById);
+    router.get('/getProductByCode/:code', productController.getProductByCode);
     router.get('/getProductByCategory/:category', productController.getProductByCategory);
     router.get('/getProductByDev/:dev', productController.getProductByDev);
     router.get('/getProductByDevAndCate/:cate/:dev', productController.getProductByDevAndCate);
-
-    router.post('/addProduct', productController.addProduct);
     router.get('/searchItem/param/:param', productController.searchItem);
+
+    //Trang chi tiết sản phẩm
+    router.get('/detailProduct/:id', productController.detailProduct);
+
+
+    //admin
     
+    router.post('/addProduct', upload.single('html'), productController.addProduct);
+    router.patch('/editProduct/:id', upload.single('html'), productController.editProduct);
+    router.delete('/deleteProduct/:id', productController.deleteProduct);
     return app.use('/product', router);
 }
 

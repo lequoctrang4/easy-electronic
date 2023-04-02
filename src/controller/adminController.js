@@ -20,6 +20,7 @@ let removeCustomer = async (req, res) =>{
 let editCustomer = async (req, res) =>{
 
 } 
+
 module.exports= {
     getAllCustomer,
     getCustomer,
