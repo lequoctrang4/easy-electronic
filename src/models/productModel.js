@@ -1,7 +1,5 @@
 import pool from '../configs/connectDB'
 
-
-
 let getProductByCategory = async (cate) => {
     try {
         let [product] = await pool.execute(`select product.id, name, color, sale_percent, price, manufacturer, html, image from product inner JOIN category ON product.category_id = category.id where title = ?;`, [cate]);
@@ -38,14 +36,7 @@ let getProductById = async (id) => {
         return error;
     }
 };
-let searchItem = async (param) => {
-    if(param.toLowerCase() === "laptop") return await getAllLaptop();
-    if(param.toLowerCase() === "tablet") return await getAllTablet();
-    if(param.toLowerCase() === "phone") return await getAllPhone();
-    if(param.toLowerCase() === "watch") return await getAllWatch();
-    let [product] = await pool.execute(`select * from product where id = ? or name = ? or hang_sx = ?`, [param, param, param]);
-    return product; 
-};
+
 
 let addProduct = async (code, name, category_id, color, sale_percent, price, manufacturer, html, image,  key, value) => {
     try {
@@ -107,8 +98,63 @@ let deleteProduct = async (id) => {
         return error;
     }
 };
+let searchItem = async (param) => {
+    let [product] = await pool.execute(`select * from product where id = ? or name = ? or hang_sx = ?`, [param, param, param]);
+    return product; 
+};
+
+let getAllCategory = async () =>{
+    let [cate] = await pool.execute(`select * from category`);
+    return cate;
+};
+let addCategory = async (title) =>{
+    try {
+        await pool.execute(`insert into category VALUES (NULL, ?)`, [title]);
+        return 'sucess';
+    } catch (error) {
+        return error;
+    }
+};
+let editCategory = async (id, title) =>{
+    try {
+        await pool.execute(`update category SET title = ? where id = ?`, [title, id]);
+        return 'success';
+    } catch (error) {
+        return error;
+    }
+};
+let getAllAttribute = async () =>{
+    let [attribute] = await pool.execute(`select * from attribute`);
+    return attribute;
+};
+let addAttribute = async (name, group) =>{
+    try {
+        await pool.execute(`insert into attribute VALUES (NULL,?,?)`, [name, group]);
+        return 'success';
+    } catch (error) {
+        return error;
+    }
+};
+let editAttribute = async (name, group, id, old_id) =>{
+    try {
+        await pool.execute(`update attribute SET \`id\` = ?, \`name\` = ?, \`group\` = ? where \`id\` = ?`, [id, name, group, old_id]);
+        return 'success';
+    } catch (error) {
+        return 'Id has already been exists!';
+    }
+};
+let deleteAttribute = async (id) =>{
+    try {
+        await pool.execute(`delete from attribute where id = ?`, [id]);
+        return 'success';
+    } catch (error) {
+        return error;
+    }
+};
 module.exports = {
     getProductByCategory, getProductByDev, getAttribute_ValueById, getProductByDevAndCate,
-    searchItem, addProduct, detailProduct, getProductById, editProduct, deleteProduct, getProductByCode
+    searchItem, addProduct, detailProduct, getProductById, editProduct, deleteProduct, getProductByCode,
+    getAllCategory, addCategory, editCategory, getAllAttribute, addAttribute, editAttribute,
+    deleteAttribute
 
 }

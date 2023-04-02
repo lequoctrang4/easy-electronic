@@ -1,3 +1,4 @@
+import { group } from 'console';
 import productModel from '../models/productModel'
 const fs = require('fs');
 let getProductByCode = async (req, res) =>{
@@ -62,7 +63,7 @@ let detailProduct = async (req, res) =>{
     const {product, detail} = await productModel.detailProduct(id);
     const contents =  fs.readFileSync('./src/public/html/' + product.html, {encoding:'utf8'});
     product.html = contents;
-    return res.status(400).json({product, detail});
+    return res.status(200).json({product, detail});
 };
 
 let deleteProduct = async (req, res) => {
@@ -73,15 +74,56 @@ let deleteProduct = async (req, res) => {
 };
 
 
-
 let searchItem = async (req, res) => {
     let param = req.params.param;
-    let rs = await productModel.searchItem(param);
-    return res.status(400).json({data:rs});
+    let rs;
+    if(param.toLowerCase() === "laptop") rs = await productModel.getProductByCategory('laptop');
+    if(param.toLowerCase() === "tablet") rs = await productModel.getProductByCategory('tablet');
+    if(param.toLowerCase() === "cellphone") rs = await productModel.getProductByCategory('cellphone');
+    if(param.toLowerCase() === "watch") rs = await productModel.getProductByCategory('watch');
+    // let rs = await productModel.searchItem(param);
+    return res.status(200).json({data: rs});
 };
-
+let getAllCategory = async (req, res) => {
+    let rs = await productModel.getAllCategory();
+    return res.status(200).json({data:rs});
+};
+let addCategory = async (req, res) => {
+    const {id, title} = req.body;
+    let rs = await productModel.addCategory(title);
+    if (rs !== 'success') return res.status(400).json({message:rs});
+    return res.status(200).json({data:rs});
+};
+let editCategory = async (req, res) => {
+    const {id, title} = req.params;
+    let rs = await productModel.editCategory(id, title);
+    if (rs !== 'success') return res.status(400).json({message:rs});
+    return res.status(200).json({data:rs});
+};
+let getAllAttribute = async (req, res) => {
+    let rs = await productModel.getAllAttribute();
+    return res.status(200).json({data:rs});
+};
+let addAttribute = async (req, res) => {
+    const {name, group} = req.body;
+    let rs = await productModel.addAttribute(name, group);
+    if (rs !== 'success') return res.status(400).json({message:rs});
+    return res.status(200).json({data:rs});
+};
+let editAttribute = async (req, res) => {
+    const {id, name, group} = req.body;
+    let rs = await productModel.editAttribute(name, group, id, req.params.id);
+    if (rs !== 'success') return res.status(400).json({message: rs});
+    return res.status(200).json({data:rs});
+};
+let deleteAttribute = async (req, res) => {
+    let rs = await productModel.deleteAttribute(req.params.id);
+    if (rs !== 'success') return res.status(400).json({message: rs});
+    return res.status(200).json({data:rs});
+};
 module.exports = {
     getProductByCategory, addProduct, getProductByDev, getProductByDevAndCate,
     searchItem, editProduct, detailProduct, deleteProduct, getProductByCode,
-    getProductById
+    getProductById, getAllCategory, addCategory, editCategory, getAllAttribute,
+    addAttribute, editAttribute, deleteAttribute
 }
