@@ -47,7 +47,6 @@ const productRoute =(app) =>{
     router.post('/addAttribute', productController.addAttribute);
     router.patch('/editAttribute/:id', productController.editAttribute);
     router.delete('/deleteAttribute/:id', productController.deleteAttribute);
-
     router.post('/addProduct', upload.single('html'), productController.addProduct);
     router.patch('/editProduct/:id', upload.single('html'), productController.editProduct);
     router.delete('/deleteProduct/:id', productController.deleteProduct);
