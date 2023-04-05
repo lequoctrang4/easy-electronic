@@ -1,4 +1,5 @@
 import pool from '../configs/connectDB'
+import { isNumber } from "../utils/validation";
 
 let getProductByCategory = async (cate) => {
     try {
@@ -34,6 +35,7 @@ let getProductByDev = async (dev) => {
 };
 let getProductById = async (id) => {
     try {
+        if (!isNumber(id)) return [];
         let [product] = await pool.execute(`select * from product where id = ?;`, [id]);
         return product;
     } catch (error) {
@@ -74,7 +76,7 @@ let deleteAttribute_ValueById = async (id) => {
 
 let detailProduct = async (id) =>{
     try {
-        let product = (await getProductById(id))[0];
+        let product = await getProductById(id);
         let detail = await getAttribute_ValueById(id);
         return {product, detail};
     } catch (error) {
@@ -103,7 +105,11 @@ let deleteProduct = async (id) => {
     }
 };
 let searchItem = async (param) => {
-    let [product] = await pool.execute(`select * from product where id = ? or name = ? or hang_sx = ?`, [param, param, param]);
+    param = '%' + param + '%';
+    let [product] = await pool.execute(
+      `select * from product where id LIKE ? or name LIKE ? or manufacturer  LIKE ?`,
+      [param, param, param]
+    );
     return product; 
 };
 

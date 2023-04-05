@@ -1,15 +1,15 @@
-import { group } from 'console';
 import productModel from '../models/productModel'
+
 const fs = require('fs');
 let getProductByCode = async (req, res) =>{
     let rs = await productModel.getProductByCode(req.params.code);
     if (rs.length === 0) return res.status(404).json({message: 'Not Found!'});
-    return res.status(200).json({message: rs});
+    return res.status(200).json({data: rs[0]});
 };
 let getProductById = async (req, res) =>{
     let rs = await productModel.getProductById(req.params.id);
     if (rs.length === 0) return res.status(404).json({message: 'Not Found!'});
-    return res.status(200).json({message: rs});
+    return res.status(200).json({ data: rs[0]});
 };
 let getProductByCategory = async (req, res) =>{
     let category = req.params.category;
@@ -39,15 +39,15 @@ let addProduct =async (req, res) =>{
     if (check.length === 1)
         return res.status(400).json({msg: "Product has existing code!"});
     let rs = await productModel.addProduct(code, name, category_id, color, sale_percent, price, manufacturer, req.file.filename, image, key, value);
-    if (rs !== 'success') res.status(400).json({data: rs});
-    return res.status(200).json({data: rs});
+    if (rs !== 'success') res.status(400).json({ message: rs });
+    return res.status(200).json({ message: rs });
 };
 
 
 let editProduct =async (req, res) =>{
     const id = req.params.id;
-    let rs = await productModel.getProductById(id);
-    if (rs.length === 0) return res.status(404).json({message: 'Not Found!'});
+    let pro = await productModel.getProductById(id);
+    if (pro.length === 0) return res.status(404).json({message: 'Not Found!'});
     const {code, name, category_id, color, sale_percent, price, manufacturer, image, key, value} = req.body;
     if(req.fileValidationError)
       return res.status(400).json({message: req.fileValidationError});
@@ -59,15 +59,18 @@ let editProduct =async (req, res) =>{
 let detailProduct = async (req, res) =>{
     const id = req.params.id;
     const pro = await productModel.getProductById(id);
-    if (pro.length == 0) return res.status(404).json({message: "Not Found!"});
+    if (pro.length == 0)
+      return res.status(404).json({ message: "Not Found!" });
     const {product, detail} = await productModel.detailProduct(id);
-    const contents =  fs.readFileSync('./src/public/html/' + product.html, {encoding:'utf8'});
-    product.html = contents;
+    if (product.html)
+        product.html = fs.readFileSync('./src/public/html/' + product.html, {encoding:'utf8'});
     return res.status(200).json({product, detail});
 };
 
 let deleteProduct = async (req, res) => {
     const id = req.params.id;
+    const pro = await productModel.getProductById(id);
+    if (pro.length == 0) return res.status(404).json({ message: "Not Found!" });
     const rs = await productModel.deleteProduct(id);
     if (rs !== 'success') res.status(400).json({message: rs});
     return res.status(200).json({message: rs});
@@ -78,10 +81,10 @@ let searchItem = async (req, res) => {
     let param = req.params.param;
     let rs;
     if(param.toLowerCase() === "laptop") rs = await productModel.getProductByCategory('laptop');
-    if(param.toLowerCase() === "tablet") rs = await productModel.getProductByCategory('tablet');
-    if(param.toLowerCase() === "cellphone") rs = await productModel.getProductByCategory('cellphone');
-    if(param.toLowerCase() === "watch") rs = await productModel.getProductByCategory('watch');
-    // let rs = await productModel.searchItem(param);
+    else if(param.toLowerCase() === "tablet") rs = await productModel.getProductByCategory('tablet');
+    else if(param.toLowerCase() === "cellphone") rs = await productModel.getProductByCategory('cellphone');
+    else if(param.toLowerCase() === "watch") rs = await productModel.getProductByCategory('watch');
+    else rs = await productModel.searchItem(param);
     return res.status(200).json({data: rs});
 };
 let getAllCategory = async (req, res) => {
@@ -100,16 +103,19 @@ let editCategory = async (req, res) => {
     if (rs !== 'success') return res.status(400).json({message:rs});
     return res.status(200).json({data:rs});
 };
+
 let getAllAttribute = async (req, res) => {
     let rs = await productModel.getAllAttribute();
     return res.status(200).json({data:rs});
 };
+
 let addAttribute = async (req, res) => {
     const {name, group} = req.body;
     let rs = await productModel.addAttribute(name, group);
     if (rs !== 'success') return res.status(400).json({message:rs});
     return res.status(200).json({data:rs});
 };
+
 let editAttribute = async (req, res) => {
     const {id, name, group} = req.body;
     let rs = await productModel.editAttribute(name, group, id, req.params.id);

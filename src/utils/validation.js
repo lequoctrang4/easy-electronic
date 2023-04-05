@@ -5,6 +5,9 @@ function isValidDate(value) {
   const date = new Date(value);
   return value && date !== 'Invalid Date';
 }
+function isNumber(value) {
+    return /^-?\d+$/.test(value);
+}
 function isValidPhone(value){
   let phoneRegex = /^\d{10}$/;
   return phoneRegex.test(value);
@@ -15,6 +18,10 @@ function isValidEmail(value) {
   return value && valid;
 }
 
-module.exports ={
-    isValidText, isValidDate, isValidEmail, isValidPhone
-}
+module.exports = {
+  isValidText,
+  isValidDate,
+  isValidEmail,
+  isValidPhone,
+  isNumber,
+};
