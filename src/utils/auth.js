@@ -23,6 +23,7 @@ export function checkAuthMiddleware(req, res, next) {
     console.log('NOT AUTH. AUTH HEADER MISSING.');
     return res.status(401).json({msg: "Not authenticated."});
   }
+  const authFragments = req.headers.authorization.split(' ');
   if (authFragments.length !== 2) {
     console.log('NOT AUTH. AUTH HEADER INVALID.');
     return res.status(401).json({msg: "Not authenticated."});

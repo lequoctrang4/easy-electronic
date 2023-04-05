@@ -1,5 +1,23 @@
 import axios from "axios";
 
+export const getProductByCategory = async() => {
+
+    try {
+      // make axios post request
+      const res = await axios({
+        method: "post",
+        url: `http://localhost:3001/product/getAllCategory`,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+      return res.data;
+    } catch(error) {
+        return error.response.data;
+    }
+  }
+  formValue = {
+    phone: "033",
+    password: "213132"
+  }
 export const signIn = async(formValue) => {
 
     try {
