@@ -36,6 +36,7 @@ let addProduct =async (req, res) =>{
     if(req.fileValidationError)
       return res.status(400).json({message: req.fileValidationError});
     let check = await productModel.getProductByCode(code);
+    console.log(req.file.filename);
     if (check.length === 1)
         return res.status(400).json({msg: "Product has existing code!"});
     let rs = await productModel.addProduct(code, name, category_id, color, sale_percent, price, manufacturer, req.file.filename, image, key, value);
@@ -51,7 +52,7 @@ let editProduct =async (req, res) =>{
     const {code, name, category_id, color, sale_percent, price, manufacturer, image, key, value} = req.body;
     if(req.fileValidationError)
       return res.status(400).json({message: req.fileValidationError});
-    rs = await productModel.editProduct(code, name, category_id, color, sale_percent, price, manufacturer, req.file.filename, image, key, value, id);
+    let rs = await productModel.editProduct(code, name, category_id, color, sale_percent, price, manufacturer, req.file.filename, image, key, value, id);
     if (rs !== 'success') res.status(400).json({message: rs});
     return res.status(200).json({message: rs});
 };

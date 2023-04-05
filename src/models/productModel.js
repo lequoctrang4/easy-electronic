@@ -76,7 +76,7 @@ let deleteAttribute_ValueById = async (id) => {
 
 let detailProduct = async (id) =>{
     try {
-        let product = await getProductById(id);
+        let product = (await getProductById(id))[0];
         let detail = await getAttribute_ValueById(id);
         return {product, detail};
     } catch (error) {
