@@ -9,8 +9,12 @@ let getProductByCategory = async (cate) => {
     }
 }
 let getProductByCode = async (code)=>{
+    try {
     let [product] = await pool.execute(`select * from product where code = ?`, [code]);
     return product;
+    } catch (error) {
+        return error;
+    }
 };
 let getProductByDevAndCate = async (cate, dev) => {
     try {

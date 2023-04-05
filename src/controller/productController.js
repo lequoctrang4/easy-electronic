@@ -3,7 +3,7 @@ import productModel from '../models/productModel'
 const fs = require('fs');
 let getProductByCode = async (req, res) =>{
     let rs = await productModel.getProductByCode(req.params.code);
-    if (rs.length === 0) res.status(404).json({message: 'Not Found!'});
+    if (rs.length === 0) return res.status(404).json({message: 'Not Found!'});
     return res.status(200).json({message: rs});
 };
 let getProductById = async (req, res) =>{
