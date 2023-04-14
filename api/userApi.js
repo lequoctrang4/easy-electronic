@@ -1,11 +1,10 @@
-require("dotenv").config({ path: require("find-config")(".env") });
 
 import axios from "axios";
 
 export const searchItem = async (input) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/searchItem/${input}`,
+    url: `http://localhost:3001/product/searchItem/${input}`,
   });
   return res.data;
 };
@@ -13,35 +12,35 @@ export const searchItem = async (input) => {
 export const getProductById = async (ID) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getProductById/${ID}`,
+    url: `http://localhost:3001/product/getProductById/${ID}`,
   });
   return res.data;
 };
 export const getProductByDev = async (Dev) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getProductByDev/${Dev}`,
+    url: `http://localhost:3001/product/getProductByDev/${Dev}`,
   });
   return res.data;
 };
 export const getProductByCode = async (Code) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getProductById/${Code}`,
+    url: `http://localhost:3001/product/getProductById/${Code}`,
   });
   return res.data;
 };
 export const getProductByCategory = async (Category) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getProductByCategory/${Category}`,
+    url: `http://localhost:3001/product/getProductByCategory/${Category}`,
   });
   return res.data;
 };
 export const getProductByDevAndCate = async (Dev, Category) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getProductByCategory/${Category}/${Dev}`,
+    url: `http://localhost:3001/product/getProductByCategory/${Category}/${Dev}`,
   });
   return res.data;
 };
@@ -49,7 +48,7 @@ export const getProductByDevAndCate = async (Dev, Category) => {
 export const detailProduct = async (id) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/detailProduct/${id}`,
+    url: `http://localhost:3001/product/detailProduct/${id}`,
   });
   return res.data;
 };
@@ -57,7 +56,7 @@ export const detailProduct = async (id) => {
 export const getAllCategory = async () => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getAllCategory`,
+    url: `http://localhost:3001/product/getAllCategory`,
   });
   return res.data;
 };
@@ -65,7 +64,7 @@ export const getAllCategory = async () => {
 export const getAllAttribute = async () => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getAllAttribute`,
+    url: `http://localhost:3001/product/getAllAttribute`,
   });
   return res.data;
 };
@@ -73,7 +72,7 @@ export const getAllAttribute = async () => {
 export const signIn = async (formValue) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/signIn`,
+    url: `http://localhost:3001/user/signIn`,
     data: formValue,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
@@ -83,7 +82,7 @@ export const signIn = async (formValue) => {
 export const signUp = async (formValue) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/signUp`,
+    url: `http://localhost:3001/user/signUp`,
     data: formValue,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
@@ -93,7 +92,7 @@ export const signUp = async (formValue) => {
 export const getProfile = async (token) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/getProfile`,
+    url: `http://localhost:3001/user/getProfile`,
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -101,7 +100,7 @@ export const getProfile = async (token) => {
 export const editProfile = async (token, formValue) => {
   const res = await axios({
     method: "patch",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/editProfile`,
+    url: `http://localhost:3001/user/editProfile`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -113,7 +112,7 @@ export const editProfile = async (token, formValue) => {
 export const setAvatar = async (token, formValue) => {
   const res = await axios({
     method: "patch",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/setAvatar`,
+    url: `http://localhost:3001/user/setAvatar`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -126,7 +125,7 @@ export const setAvatar = async (token, formValue) => {
 export const getAvatar = async (token) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/getAvatar`,
+    url: `http://localhost:3001/user/getAvatar`,
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -134,7 +133,7 @@ export const getAvatar = async (token) => {
 export const changePassword = async (token, formValue) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/changePassword`,
+    url: `http://localhost:3001/user/changePassword`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -147,7 +146,7 @@ export const changePassword = async (token, formValue) => {
 export const forgetPassword = async (formValue) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/user/forgetPassword`,
+    url: `http://localhost:3001/user/forgetPassword`,
     data: formValue,
     headers: { "content-type": "application/x-www-form-urlencoded" },
   });

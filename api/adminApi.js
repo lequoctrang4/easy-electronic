@@ -1,10 +1,9 @@
-require("dotenv").config({ path: require("find-config")(".env") });
 import axios from "axios";
 
 export const getAllAttribute = async (token) => {
   const res = await axios({
     method: "get",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/getAllAttribute`,
+    url: `http://localhost:3001/product/getAllAttribute`,
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -13,7 +12,7 @@ export const getAllAttribute = async (token) => {
 export const addAttribute = async (formValue, token) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/addAttribute`,
+    url: `http://localhost:3001/product/addAttribute`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -26,7 +25,7 @@ export const addAttribute = async (formValue, token) => {
 export const deleteAttribute = async (id, token) => {
   const res = await axios({
     method: "delete",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/deleteAttribute/${id}`,
+    url: `http://localhost:3001/product/deleteAttribute/${id}`,
     headers: {
       Authorization: `Bearer ${token}`
     },
@@ -36,7 +35,7 @@ export const deleteAttribute = async (id, token) => {
 export const editAttribute = async (id, formValue, token) => {
   const res = await axios({
     method: "patch",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/editAttribute/${id}`,
+    url: `http://localhost:3001/product/editAttribute/${id}`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -49,7 +48,7 @@ export const editAttribute = async (id, formValue, token) => {
 export const addProduct = async (formValue, token) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/addProduct`,
+    url: `http://localhost:3001/product/addProduct`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -62,7 +61,7 @@ export const addProduct = async (formValue, token) => {
 export const editProduct = async (id, formValue, token) => {
   const res = await axios({
     method: "patch",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/editProduct/${id}`,
+    url: `http://localhost:3001/product/editProduct/${id}`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -75,7 +74,7 @@ export const editProduct = async (id, formValue, token) => {
 export const deleteProduct = async (id, token) => {
   const res = await axios({
     method: "delete",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/deleteProduct/${id}`,
+    url: `http://localhost:3001/product/deleteProduct/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -86,7 +85,7 @@ export const deleteProduct = async (id, token) => {
 export const addCategory = async (formValue, token) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/addCategory`,
+    url: `http://localhost:3001/product/addCategory`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -99,7 +98,7 @@ export const addCategory = async (formValue, token) => {
 export const editCategory = async (id, formValue, token) => {
   const res = await axios({
     method: "patch",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/editCategory/${id}`,
+    url: `http://localhost:3001/product/editCategory/${id}`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -112,7 +111,7 @@ export const editCategory = async (id, formValue, token) => {
 export const deleteCategory = async (id, token) => {
   const res = await axios({
     method: "delete",
-    url: `http://localhost:${process.env.PORT_BACKEND}/product/deleteCategory/${id}`,
+    url: `http://localhost:3001/product/deleteCategory/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
