@@ -178,6 +178,7 @@ let changePassword = async (req, res) => {
 
 let forgetPassword = async (req, res) =>{
     let {email, phone} = req.body;
+
     let users = await userModel.getUserByPhone(phone);
     if (Object.keys(users).length === 0)
         return res.status(404).json({
@@ -188,8 +189,8 @@ let forgetPassword = async (req, res) =>{
         return res.status(404).json({message: "Không tìm thấy người dùng"})
     let pass = Math.floor(Math.random() * 110000000000);
     const hashedPw = await hash(pass.toString(), 12);
-    let rs = userModel.changePassword(hashedPw, user.id);
     sendEmail(email, "Reset password Easy Electronic", "View", "<h1>Pass mới của bạn là: " + pass + "</h1>");
+    let rs = userModel.changePassword(hashedPw, user.id);
     return res.status(200).json({
         message: "success"
     });
