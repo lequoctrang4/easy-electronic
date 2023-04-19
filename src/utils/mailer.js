@@ -2,10 +2,12 @@ require("dotenv").config({path: require('find-config')('.env') });
 const sgMail = require('@sendgrid/mail')
 
 export function sendEmail (to, subject, text, html){
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+    const api = process.env.SENDGRID_API_KEY1 + '.' + process.env.SENDGRID_API_KEY2 + '.' + process.env.SENDGRID_API_KEY3;
+    sgMail.setApiKey(api);
     const msg = {
     to: to, // Change to your recipient
-    from: process.env.EMAIL, // Change to your verified sender
+    from: {name: "Easy Electrolic",
+        email: process.env.EMAIL}, // Change to your verified sender
     subject: subject,
     text: text,
     html: html,
