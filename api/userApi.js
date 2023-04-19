@@ -132,7 +132,7 @@ export const getAvatar = async (token) => {
 };
 export const changePassword = async (token, formValue) => {
   const res = await axios({
-    method: "post",
+    method: "patch",
     url: `http://localhost:3001/user/changePassword`,
     data: formValue,
     headers: {

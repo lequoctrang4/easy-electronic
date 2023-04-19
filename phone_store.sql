@@ -110,6 +110,7 @@ CREATE TABLE if not exists `review` (
   `rating` int(10) NOT NULL,
   `image` varchar(100) NOT NULL,
   `content` varchar(500) NOT NULL,
+  `dateReview` datetime NOT NULL,
   foreign key (`user_id`) references `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   foreign key (`product_id`) references `product`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -259,3 +260,4 @@ INSERT INTO `attribute_value` (`id`, `attribute_id`, `value`, `product_id`) VALU
 (32, 35, '5G Support, Wireless Charging, Face Detection, Water Resistant, Dust Resistant', 1),
 (33, 37, '1_43534534.png', 1);
 
+INSERT INTO `review` (`id`, `product_id`, `user_id`, `rating`, `image`, `content`, `dateReview`) VALUES (NULL, '1', '1', '5', '', 'Sản phẩm này còn hàng không ạ?', '2023-04-19 18:29:27.000000');

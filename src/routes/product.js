@@ -41,6 +41,7 @@ const productRoute =(app) =>{
 
 
     //admin
+    router.use(checkAuthAdminMiddleware);
     router.post('/addCategory', productController.addCategory);
     router.patch('/editCategory/:id/:title', productController.editCategory);
     router.get('/getAllAttribute', productController.getAllAttribute);

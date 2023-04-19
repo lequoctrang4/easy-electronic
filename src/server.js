@@ -2,6 +2,7 @@ import express from 'express';
 import configViewEngine from './configs/viewEngine';
 import productRoute from './routes/product';
 import userRoute from './routes/user';
+import ReviewRoute from './routes/review';
 import cors from 'cors';
 require('dotenv').config();
 
@@ -31,7 +32,7 @@ configViewEngine(app);
 //init web route
 productRoute(app);
 userRoute(app);
-
+ReviewRoute(app);
 //image
 //handle 404 not found
 app.use((req, res) => {

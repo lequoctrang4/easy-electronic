@@ -48,7 +48,8 @@ export function checkAuthAdminMiddleware(req, res, next) {
     return res.status(401).json({msg: "Not authenticated."});
   }
   const authFragments = req.headers.authorization.split(' ');
-  console.log(parseJwt(authFragments[1]));
+  let isAdmin = parseJwt(authFragments[1]).isAdmin;
+  if (!isAdmin) return res.status(401).json({ msg: "Not authenticated." });
   if (authFragments.length !== 2) {
     console.log('NOT AUTH. AUTH HEADER INVALID.');
     return res.status(401).json({msg: "Not authenticated."});
