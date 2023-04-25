@@ -1,6 +1,6 @@
 import  express  from "express";
 import path from 'path';
-import userController from '../controller/userController';
+import adminController from '../controller/adminController';
 import multer from 'multer';
 import appRoot from "app-root-path";
 import {checkAuthAdminMiddleware, parseJwt} from "../utils/auth";
@@ -25,18 +25,12 @@ const imageFilter = function (req, file, cb) {
 };
 
 let upload = multer({ storage: storage, fileFilter: imageFilter });
-
-const UserRoute = (app) =>{
-    router.post('/signIn', userController.signIn);
-    router.post('/signUp', userController.signUp);
-    router.post('/forgetPassword', userController.forgetPassword);
+const AdminRoute = (app) =>{
     router.use(checkAuthAdminMiddleware);
-    router.get('/getAvatar', userController.getAvatar);
-    router.patch('/setAvatar', upload.single('image'), userController.setAvatar);
-    router.get('/getProfile', userController.getProfile);
-    router.patch('/editProfile', userController.editProfile);
-    router.patch('/changePassword', userController.changePassword);
+    router.get("/getAllUser", adminController.getAllUser);
+    router.delete("/deleteUser/:id", adminController.deleteUser);
+    router.get("/getAllStaff", adminController.getAllStaff);
+    router.post("/addStaff", adminController.addStaff);
     return app.use('/admin', router);
 }
-
-export default UserRoute;
+export default AdminRoute;

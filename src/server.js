@@ -3,6 +3,8 @@ import configViewEngine from './configs/viewEngine';
 import productRoute from './routes/product';
 import userRoute from './routes/user';
 import ReviewRoute from './routes/review';
+import AdminRoute from "./routes/admin";
+
 import cors from 'cors';
 require('dotenv').config();
 
@@ -33,6 +35,7 @@ configViewEngine(app);
 productRoute(app);
 userRoute(app);
 ReviewRoute(app);
+AdminRoute(app);
 //image
 //handle 404 not found
 app.use((req, res) => {
