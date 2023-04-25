@@ -5,6 +5,14 @@ let getAllUser = async (admin) => {
     let [user] = await pool.execute(`SELECT * FROM User where isAdmin = ?`, [admin]);
     return user;
 };
+
+let getUser = async (id) => {
+  let [user] = await pool.execute(`SELECT * FROM User where id = ?`, [
+    id,
+  ]);
+  return user;
+};
+
 let deleteUser = async (id) => {
     try {
     await pool.execute(`Delete from user where id = ?`, [id]);
@@ -29,11 +37,12 @@ let addStaff = async (name, email, phone, password, address) => {
 
 
 
-module.exports ={
-    getAllUser,
-    deleteUser,
-    addStaff
-}
+module.exports = {
+  getAllUser,
+  deleteUser,
+  addStaff,
+  getUser,
+};
 
 
 

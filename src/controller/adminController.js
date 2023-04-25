@@ -5,7 +5,10 @@ let getAllUser = async (req, res) =>{
     let User = await adminModel.getAllUser(0);
     return res.status(200).json(User);
 }
-
+let getUser = async (req, res) => {
+  let User = await adminModel.getUser(req.params.id);
+  return res.status(200).json(User);
+};
 let deleteUser = async (req, res) =>{
     const id = req.params.id;
     if (!id) return res.status(400).json({message: "Invalid"});
@@ -32,4 +35,5 @@ module.exports = {
   deleteUser,
   addStaff,
   getAllStaff,
+  getUser,
 };

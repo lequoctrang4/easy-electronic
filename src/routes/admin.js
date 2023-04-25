@@ -28,6 +28,7 @@ let upload = multer({ storage: storage, fileFilter: imageFilter });
 const AdminRoute = (app) =>{
     router.use(checkAuthAdminMiddleware);
     router.get("/getAllUser", adminController.getAllUser);
+    router.get("/getUser/:id", adminController.getUser);
     router.delete("/deleteUser/:id", adminController.deleteUser);
     router.get("/getAllStaff", adminController.getAllStaff);
     router.post("/addStaff", adminController.addStaff);

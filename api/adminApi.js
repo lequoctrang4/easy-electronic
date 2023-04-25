@@ -16,7 +16,14 @@ export const getAllStaff = async (token) => {
   });
   return res.data;
 };
-
+export const getUser = async (id, token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/admin/getUser/${id}`,
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
 export const deleteUser = async (id, token) => {
   const res = await axios({
     method: "delete",
