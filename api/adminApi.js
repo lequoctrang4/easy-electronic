@@ -1,5 +1,44 @@
 import axios from "axios";
 
+export const getAllUser = async (token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/admin/getAllUser`,
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
+export const getAllStaff = async (token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/admin/getAllStaff`,
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
+
+export const deleteUser = async (id, token) => {
+  const res = await axios({
+    method: "delete",
+    url: `http://localhost:3001/admin/deleteUser/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  });
+  return res.data;
+};
+export const addStaff = async (formValue, token) => {
+  const res = await axios({
+    method: "delete",
+    url: `http://localhost:3001/admin/deleteUser/${id}`,
+    data: formValue,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'text/plain'
+    },
+  });
+  return res.data;
+};
 export const getAllAttribute = async (token) => {
   const res = await axios({
     method: "get",
@@ -8,6 +47,7 @@ export const getAllAttribute = async (token) => {
   });
   return res.data;
 };
+
 
 export const addAttribute = async (formValue, token) => {
   const res = await axios({
