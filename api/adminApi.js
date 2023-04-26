@@ -37,7 +37,7 @@ export const deleteUser = async (id, token) => {
 export const addStaff = async (formValue, token) => {
   const res = await axios({
     method: "post",
-    url: `http://localhost:3001/admin/addUser`,
+    url: `http://localhost:3001/admin/addStaff`,
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
