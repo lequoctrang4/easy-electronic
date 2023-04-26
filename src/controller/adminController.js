@@ -26,7 +26,7 @@ let addStaff = async (req, res) => {
     const hashedPw = await hash(password, 12);
     let rs = await adminModel.addStaff(name, email, phone, hashedPw, address);
     if (rs === true) return res.status(200).json({message: "Add Staff successfully!"})
-    return res.status(400).json({message: rs});
+    return res.status(400).json({message: "Số điện thoại hoặc Email bị trùng hoặc không đúng!"});
 };
 
 

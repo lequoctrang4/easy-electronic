@@ -31,7 +31,7 @@ const AdminRoute = (app) =>{
     router.get("/getUser/:id", adminController.getUser);
     router.delete("/deleteUser/:id", adminController.deleteUser);
     router.get("/getAllStaff", adminController.getAllStaff);
-    router.post("/addStaff", adminController.addStaff);
+    router.post("/addStaff", upload.any(), adminController.addStaff);
     return app.use('/admin', router);
 }
 export default AdminRoute;

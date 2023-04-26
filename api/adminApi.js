@@ -41,7 +41,7 @@ export const addStaff = async (formValue, token) => {
     data: formValue,
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'text/plain'
+      "Content-Type": "application/json",
     },
   });
   return res.data;
