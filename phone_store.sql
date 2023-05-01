@@ -52,10 +52,10 @@ CREATE TABLE if not exists `voucher` (
   `id` varchar(50) PRIMARY KEY,
   `name` varchar(100) NOT NULL,
   `sale_percent` int NOT NULL,
-  `max_price` int NOT NULL,
-  `min_price_apply` int NOT NULL,
-  `count` int NOT NULL,
-  `expired` date NOT NULL
+  `max_price` int,
+  `min_price_apply` int,
+  `count` int,
+  `expired` date
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE if not exists `own_voucher` (
@@ -80,12 +80,12 @@ CREATE TABLE if not exists `payment` (
 CREATE TABLE if not exists `order` (
   `id` int PRIMARY KEY auto_increment,
   `user_id` int NOT NULL,
-  `voucher_id` varchar(50) NOT NULL,
+  `voucher_id` varchar(50),
   `payment_id` int NOT NULL,
   `shipping_id` int NOT NULL,
   `time_order` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `time_get` datetime NOT NULL,
-  `status` varchar(50) NOT NULL check ("Confirm" or "Delivery" or "Success"),
+  `time_get` datetime,
+  `status` varchar(50) NOT NULL,
   `sum_price` int(100) NOT NULL,
   `notice` varchar(250) NOT NULL,
   foreign key (`voucher_id`) references `voucher`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -172,8 +172,6 @@ INSERT INTO `product` (`id`, `code`, `category_id`, `name`, `color`, `sale_perce
 (29, 'PSKRUTT', 4, 'Samsung Galaxy A34 5G 8GB 128GB', 'Black', 10, 8490000, 'Samsung', '', 'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-a346_galaxy_a34_5g_awesome_silver_front.png'),
 (36, 'HFHRY43', 1, 'Xiaomi Redmi Note 11 128GB', 'Black', 10, 4990000, 'Xiaomi', 'HFHRY43.html', 'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/8/0/800x800-640x640-5.png');
 
-INSERT INTO `user` (`id`, `name`, `email`, `phone`, `password`, `avatar`, `passwordChangedAt`, `registryAt`, `last_login`, `address`) VALUES
-(5, 'Lê Quốc Trạng', 'lequoctrang512@gmail.com', '0399609015', '$2a$12$GxjaXGG3ReO7/90xx4QRLOwbV89esVcQdT/4CPApxUoIIRhmDKDlO', '5.jpg', '2023-03-30 02:13:34', '2023-03-30 02:13:34', '2023-04-01 23:58:00', 'Ktx Khu A, Thủ Đức, Tp Hồ Chí Minh');
 
 INSERT INTO `attribute` (`id`, `name`, `group`) VALUES
 (1, 'Ram capacity', 'Ram & storage'),
@@ -261,4 +259,26 @@ INSERT INTO `attribute_value` (`id`, `attribute_id`, `value`, `product_id`) VALU
 (32, 35, '5G Support, Wireless Charging, Face Detection, Water Resistant, Dust Resistant', 1),
 (33, 37, '1_43534534.png', 1);
 
-INSERT INTO `review` (`id`, `product_id`, `user_id`, `rating`, `image`, `content`, `dateReview`) VALUES (NULL, '1', '1', '5', '', 'Sản phẩm này còn hàng không ạ?', '2023-04-19 18:29:27.000000');
+
+INSERT INTO `shipping_method`(`id`, `name`, `price`) VALUES 
+(NULL, 'Giao hàng nhanh', 30000),
+(NULL, 'Hỏa tốc', 120000),
+(NULL, 'Giao hàng tiết kiệm', 25000);
+
+INSERT INTO `payment`(`id`, `name`) VALUES 
+(NULL,'Thanh toán khi nhận hàng'),
+(NULL, 'Thanh toán qua ví Momo'),
+(NULL, 'Thanh toán qua ví ZaloPay'),
+(NULL, 'Thanh toán qua ngân hàng');
+
+INSERT INTO `user` (`id`, `name`, `email`, `phone`, `password`, `avatar`, `passwordChangedAt`, `registryAt`, `last_login`, `address`, `isAdmin`) VALUES
+(1, 'Trần Thanh Tâm', 'lequoctrang4@gmail.com', '0399609016', '$2a$12$W1lu3Sn.nsgVx140o77q2OylvqrrkcvtTWiLxDkspmqBHdx7zB52e', NULL, '2023-04-26 01:19:10', '2023-04-26 01:19:10', '2023-04-28 13:15:32', NULL, 0),
+(2, 'Lê Quốc Trạng', 'lequoctrang512@gmail.com', '0335674333', '$2a$12$/4VEVsEpmWJsn513/FGaO.1CYckwe02a/SUJBg6l8YzIIy/k/8T96', NULL, '2023-04-26 01:51:08', '2023-04-26 01:51:08', NULL, 'Hi', 1),
+(3, 'Orange', 'orange@gmail.com', '0326010510', '$2a$12$3JiCDR14EqkVKDKmo2H59.Pw2mIyDxoIs5GZsfu2mHBF8ntDTKbp.', NULL, '2023-04-26 20:54:45', '2023-04-26 20:54:45', NULL, 'Hi', 1),
+(4, 'Trần Đăng Khoa', 'khoatran@gmail.com', '0123456789', '1234567890', NULL, '2023-04-28 08:24:13', '2023-04-28 13:24:57', NULL, 'Hồ Chí Minh', 0);
+
+INSERT INTO `review` (`id`, `product_id`, `user_id`, `rating`, `image`, `content`, `dateReview`) VALUES (NULL, '1', '1', '1', '', 'Sản phẩm này còn hàng không ạ?', '2023-04-19 18:29:27.000000');
+
+INSERT INTO `voucher` (`id`, `name`, `sale_percent`, `max_price`, `min_price_apply`, `count`, `expired`) VALUES
+('1', 'Khách hàng mới', 10, 50000, 2000000, 100, '2023-05-30');
+INSERT INTO `own_voucher` (`voucher_id`, `user_id`) VALUES ('1', '1');

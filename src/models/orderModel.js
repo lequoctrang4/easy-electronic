@@ -1,14 +1,39 @@
 import pool from "../configs/connectDB";
 
+let getAllShipping = async () => {
+    let [rs] = await pool.execute(`select * from shipping_method`);
+    return rs; 
+};
+let getShipping = async (id) => {
+  let [rs] = await pool.execute(`select * from shipping_method where id = ?`,[id]);
+  return rs;
+};
+let getVoucherUser = async (id) => {
+  let [rs] = await pool.execute(`select voucher_id, name, sale_percent, max_price, min_price_apply, count, expired from own_voucher INNER join voucher on id = voucher_id where user_id = ?`, [
+    id,
+  ]);
+  return rs;
+};
 let getOrderByUser = async (id) => {
-    let [order] = await pool.execute(`select * from order where user_id = ?`, [id]);
+    let [order] = await pool.execute(`select * from \`order\` where user_id = ?`, [id]);
     return order; 
 };
-let addOrder = async (id) => {
+
+let viewDetailOrder = async (orderId) => {
+let [order] = await pool.execute(`select * from \`order_detail\` where order_id = ?`, [orderId]);
+    return order; 
+};
+let addOrder = async (id, voucher_id, payment_id, shipping_id, notice, sum_price, order_detail) => {
     try {
-        
+        // await pool.execute(`insert into \`order\` VALUES (NULL,?,?,?,?, CURRENT_TIME, NULL, 'Confirm',?,?)`,[id, voucher_id, payment_id, shipping_id, sum_price, notice]);
+        let [[{order_id}]] = await pool.execute(`SELECT id as order_id FROM \`order\` ORDER BY id DESC LIMIT 1;`);
+        order_detail.forEach(async element => {
+            await pool.execute(`insert into order_detail VALUES (NULL,?,?,?)`, [order_id, element.product_id, element.count]);
+        });
+        return true;
     } catch (error) {
-        return error;
+        console.log(error);
+        return false;
     }
 };
 let getOrderByStatus = async (status) =>{
@@ -25,5 +50,9 @@ module.exports = {
   addOrder,
   getOrderByStatus,
   deleteOrder,
-  setStatus
+  setStatus,
+  viewDetailOrder,
+  getAllShipping,
+  getShipping,
+  getVoucherUser,
 };

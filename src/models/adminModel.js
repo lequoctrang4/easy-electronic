@@ -27,7 +27,7 @@ let addStaff = async (name, email, phone, password, address) => {
         VALUES (?,?,?,?, CURRENT_TIME, CURRENT_TIME, ?, 1)`,
         [name, email, phone, password, address]
       );
-      return "success";
+      return true;
     } catch (error) {
       return error;
     }
