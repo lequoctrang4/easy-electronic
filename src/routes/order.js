@@ -16,8 +16,8 @@ const OrderRoute = (app) => {
 
     router.use(checkAuthAdminMiddleware);
     router.get("/getOrderByStatus/:status", orderController.getOrderByStatus);
-    router.delete("/deleteOrder", orderController.deleteOrder);
-    router.patch("/setStatus/:status", orderController.setStatus);
+    router.delete("/deleteOrder/:orderId", orderController.deleteOrder);
+    router.patch("/setStatus/:orderId/:status", orderController.setStatus);
     return app.use("/order", router);
 };
 

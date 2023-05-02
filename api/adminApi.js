@@ -165,6 +165,46 @@ export const deleteCategory = async (id, token) => {
   });
   return res.data;
 };
+export const getOrderByStatus = async (status, token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/getOrderByStatus/${status}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+export const viewDetailOrder = async (token, orderId) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/viewDetailOrder/${orderId}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+export const setOrderStatus = async (orderId, status , token) => {
+  const res = await axios({
+    method: "patch",
+    url: `http://localhost:3001/order/setStatus/${orderId}/${status}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return res.data;
+};
+export const deleteOrder = async (token, id) => {
+  const res = await axios({
+    method: "delete",
+    url: `http://localhost:3001/order/deleteOrder/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
 
 
 

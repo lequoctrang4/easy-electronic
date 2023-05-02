@@ -152,3 +152,69 @@ export const forgetPassword = async (formValue) => {
   });
   return res.data;
 };
+
+export const getOrderByUser = async (token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/getOrderByUser`,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return res.data;
+};
+
+export const viewDetailOrder = async (token, orderId) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/viewDetailOrder/${orderId}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+export const addOrder = async (token, formValue) => {
+  const res = await axios({
+    method: "post",
+    url: `http://localhost:3001/order/addOrder`,
+    data: formValue,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  });
+  return res.data;
+};
+export const getAllShipping = async (token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/getAllShipping`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export const getShipping = async (token, id) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/getShipping/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export const getVoucherUserHas = async (token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/getVoucherUser`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

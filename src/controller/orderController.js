@@ -21,12 +21,14 @@ let getOrderByUser = async (req, res) =>{
   const order = await orderModel.getOrderByUser(id);
   return res.status(200).json(order);
 };
+
 let viewDetailOrder = async (req, res) => {
   let { orderId } = req.params;
   console.log(orderId);
   const order = await orderModel.viewDetailOrder(orderId);
   return res.status(200).json(order);
 };
+
 let addOrder = async (req, res) =>{
   const authFragments = req.headers.authorization.split(" ");
   let { id } = parseJwt(authFragments[1]);
@@ -36,16 +38,28 @@ let addOrder = async (req, res) =>{
   return res.status(400).json("Failure");
 };
 
-let deleteOrder = async (req, res) =>{
-
-};
 
 let getOrderByStatus = async (req, res) =>{
-  
+  const {status} = req.params;
+  if (!(status === 'Confirm' || status === 'Delivery' || status === 'Sucessfully'))
+    return res.status(400).json("Invalid status");
+  const rs = await orderModel.getOrderByStatus(status);
+  return res.status(200).json(rs);
 };
-let setStatus = async (req, res) =>{
 
+let setStatus = async (req, res) =>{
+  const {orderId, status} = req.params;
+  if (!(status === 'Confirm' || status === 'Delivery' || status === 'Sucessfully'))
+    return res.status(400).json("Invalid status");
+  const rs = await orderModel.setStatus(orderId, status);
+  if (!rs) return res.status(400).json("Invalid Update Status");
+  return res.status(200).json("Update Status Successful");
 };
+
+let deleteOrder = async (req, res) => {
+  const rs = await orderModel.deleteOrder(req.params.orderId);
+  if (!rs) return res.status(400).json("Delete Order Failed");
+  return res.status(200).json("Delete Order Successful");};
 
 
 module.exports = {
