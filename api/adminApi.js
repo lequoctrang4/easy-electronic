@@ -8,6 +8,14 @@ export const getAllUser = async (token) => {
   });
   return res.data;
 };
+export const getUserByPhone = async (token, phone) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/admin/getUserByPhone/${phone}`,
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
 export const getAllStaff = async (token) => {
   const res = await axios({
     method: "get",

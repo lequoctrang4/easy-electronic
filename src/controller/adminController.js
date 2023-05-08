@@ -1,4 +1,5 @@
 import adminModel from '../models/adminModel'
+import userModel from '../models/userModel'
 const { hash, compare } = require("bcryptjs");
 
 let getAllUser = async (req, res) =>{
@@ -7,6 +8,10 @@ let getAllUser = async (req, res) =>{
 }
 let getUser = async (req, res) => {
   let User = await adminModel.getUser(req.params.id);
+  return res.status(200).json(User);
+};
+let getUserByPhone = async (req, res) => {
+  let User = await userModel.getUserByPhone(req.params.phone);
   return res.status(200).json(User);
 };
 let deleteUser = async (req, res) =>{
@@ -36,4 +41,5 @@ module.exports = {
   addStaff,
   getAllStaff,
   getUser,
+  getUserByPhone,
 };
