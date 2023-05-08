@@ -15,6 +15,8 @@ const OrderRoute = (app) => {
     router.get("/getVoucherUser", orderController.getVoucherUser);
 
     router.use(checkAuthAdminMiddleware);
+    router.get("/getOrderAdmin/:userId", orderController.getOrderAdmin);
+
     router.get("/getOrderByStatus/:status", orderController.getOrderByStatus);
     router.delete("/deleteOrder/:orderId", orderController.deleteOrder);
     router.patch("/setStatus/:orderId/:status", orderController.setStatus);

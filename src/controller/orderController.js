@@ -24,7 +24,6 @@ let getOrderByUser = async (req, res) =>{
 
 let viewDetailOrder = async (req, res) => {
   let { orderId } = req.params;
-  console.log(orderId);
   const order = await orderModel.viewDetailOrder(orderId);
   return res.status(200).json(order);
 };
@@ -38,7 +37,11 @@ let addOrder = async (req, res) =>{
   return res.status(400).json("Failure");
 };
 
-
+let getOrderAdmin = async (req, res) => {
+  let { userId } = req.params;
+  const order = await orderModel.getOrderByUser(userId);
+  return res.status(200).json(order);
+};
 let getOrderByStatus = async (req, res) =>{
   const {status} = req.params;
   if (!(status === 'Confirm' || status === 'Delivery' || status === 'Sucessfully'))
@@ -72,4 +75,5 @@ module.exports = {
   getAllShipping,
   getShipping,
   getVoucherUser,
+  getOrderAdmin,
 };

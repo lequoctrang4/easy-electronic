@@ -183,6 +183,16 @@ export const getOrderByStatus = async (status, token) => {
   });
   return res.data;
 };
+export const getOrderAdmin = async (userId, token) => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/order/getOrderAdmin/${userId}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
 export const viewDetailOrder = async (token, orderId) => {
   const res = await axios({
     method: "get",
