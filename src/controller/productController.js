@@ -1,6 +1,11 @@
 import productModel from '../models/productModel'
 
 const fs = require('fs');
+
+let getAllProduct = async (req, res) => {
+    let rs = await productModel.getAllProduct(req.params.code);
+    return res.status(200).json(rs);
+};
 let getProductByCode = async (req, res) =>{
     let rs = await productModel.getProductByCode(req.params.code);
     if (rs.length === 0) return res.status(404).json({message: 'Not Found!'});
@@ -32,15 +37,19 @@ let getProductByDevAndCate = async (req, res) =>{
 }
 
 let addProduct =async (req, res) =>{
-    const {code, name, category_id, color, sale_percent, price, manufacturer, image, key, value} = req.body;
+    let {code, name, category_id, color, sale_percent, price, manufacturer, image, key, value} = req.body;
+    if (!code || !name || !category_id || !color || !sale_percent || !price || !manufacturer || !image || !req.file)
+        return res.status(400).json("Vui lòng nhập đủ các trường");
+    if (key === undefined || value === undefined){
+        key = value =[];
+    }
     if(req.fileValidationError)
       return res.status(400).json({message: req.fileValidationError});
     let check = await productModel.getProductByCode(code);
-    console.log(req.file.filename);
     if (check.length === 1)
         return res.status(400).json({msg: "Product has existing code!"});
     let rs = await productModel.addProduct(code, name, category_id, color, sale_percent, price, manufacturer, req.file.filename, image, key, value);
-    if (rs !== 'success') res.status(400).json({ message: rs });
+    if (rs !== 'success') return res.status(400).json({ message: rs });
     return res.status(200).json({ message: rs });
 };
 
@@ -53,7 +62,7 @@ let editProduct =async (req, res) =>{
     if(req.fileValidationError)
       return res.status(400).json({message: req.fileValidationError});
     let rs = await productModel.editProduct(code, name, category_id, color, sale_percent, price, manufacturer, req.file.filename, image, key, value, id);
-    if (rs !== 'success') res.status(400).json({message: rs});
+    if (rs !== 'success') return res.status(400).json({message: rs});
     return res.status(200).json({message: rs});
 };
 
@@ -73,7 +82,7 @@ let deleteProduct = async (req, res) => {
     const pro = await productModel.getProductById(id);
     if (pro.length == 0) return res.status(404).json({ message: "Not Found!" });
     const rs = await productModel.deleteProduct(id);
-    if (rs !== 'success') res.status(400).json({message: rs});
+    if (rs !== 'success') return res.status(400).json({message: rs});
     return res.status(200).json({message: rs});
 };
 
@@ -129,8 +138,22 @@ let deleteAttribute = async (req, res) => {
     return res.status(200).json({data:rs});
 };
 module.exports = {
-    getProductByCategory, addProduct, getProductByDev, getProductByDevAndCate,
-    searchItem, editProduct, detailProduct, deleteProduct, getProductByCode,
-    getProductById, getAllCategory, addCategory, editCategory, getAllAttribute,
-    addAttribute, editAttribute, deleteAttribute
-}
+  getProductByCategory,
+  addProduct,
+  getProductByDev,
+  getProductByDevAndCate,
+  searchItem,
+  editProduct,
+  detailProduct,
+  deleteProduct,
+  getProductByCode,
+  getProductById,
+  getAllCategory,
+  addCategory,
+  editCategory,
+  getAllAttribute,
+  addAttribute,
+  editAttribute,
+  deleteAttribute,
+  getAllProduct,
+};

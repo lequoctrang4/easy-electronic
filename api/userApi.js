@@ -8,7 +8,13 @@ export const searchItem = async (input) => {
   });
   return res.data;
 };
-
+export const getAllProduct = async () => {
+  const res = await axios({
+    method: "get",
+    url: `http://localhost:3001/product/getAllProduct`,
+  });
+  return res.data;
+};
 export const getProductById = async (ID) => {
   const res = await axios({
     method: "get",

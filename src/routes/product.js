@@ -28,6 +28,7 @@ let upload = multer({ storage: storage, fileFilter: imageFilter });
 
 const productRoute =(app) =>{
     //phone
+    router.get("/getAllProduct", productController.getAllProduct);
     router.get('/getProductById/:id', productController.getProductById);
     router.get('/getProductByCode/:code', productController.getProductByCode);
     router.get('/getProductByCategory/:category', productController.getProductByCategory);

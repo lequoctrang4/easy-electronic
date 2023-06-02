@@ -1,6 +1,10 @@
 import pool from '../configs/connectDB'
 import { isNumber } from "../utils/validation";
-
+let getAllProduct = async ()=>{
+    let [product] = await pool.execute(
+        `select product.id, name, color, sale_percent, price, manufacturer, html, image from product`, []);
+    return product;
+};
 let getProductByCategory = async (cate) => {
     try {
         let [product] = await pool.execute(`select product.id, name, color, sale_percent, price, manufacturer, html, image from product inner JOIN category ON product.category_id = category.id where title = ?;`, [cate]);
@@ -44,7 +48,7 @@ let getProductById = async (id) => {
 };
 
 
-let addProduct = async (code, name, category_id, color, sale_percent, price, manufacturer, html, image,  key, value) => {
+let addProduct = async (code, name, category_id, color, sale_percent, price, manufacturer, html, image, key, value) => {
     try {
         await pool.execute(`insert into product (code, category_id, name, color, sale_percent, price, manufacturer, html, image) VALUES (?,?,?,?,?,?,?,?,?)`,
          [code, category_id, name, color, sale_percent, price, manufacturer, html, image]);
@@ -162,9 +166,23 @@ let deleteAttribute = async (id) =>{
     }
 };
 module.exports = {
-    getProductByCategory, getProductByDev, getAttribute_ValueById, getProductByDevAndCate,
-    searchItem, addProduct, detailProduct, getProductById, editProduct, deleteProduct, getProductByCode,
-    getAllCategory, addCategory, editCategory, getAllAttribute, addAttribute, editAttribute,
-    deleteAttribute
-
-}
+  getProductByCategory,
+  getProductByDev,
+  getAttribute_ValueById,
+  getProductByDevAndCate,
+  searchItem,
+  addProduct,
+  detailProduct,
+  getProductById,
+  editProduct,
+  deleteProduct,
+  getProductByCode,
+  getAllCategory,
+  addCategory,
+  editCategory,
+  getAllAttribute,
+  addAttribute,
+  editAttribute,
+  deleteAttribute,
+  getAllProduct,
+};
