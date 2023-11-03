@@ -23,9 +23,9 @@ let viewDetailOrder = async (orderId) => {
 let [order] = await pool.execute(`select * from \`order_detail\` where order_id = ?`, [orderId]);
     return order; 
 };
-let addOrder = async (id, voucher_id, payment_id, shipping_id, notice, sum_price, order_detail) => {
+let addOrder = async (oid, id, voucher_id, payment_id, shipping_id, notice, sum_price, order_detail) => {
     try {
-        await pool.execute(`insert into \`order\` VALUES (NULL,?,?,?,?, CURRENT_TIME, NULL, 'Confirm',?,?)`,[id, voucher_id, payment_id, shipping_id, sum_price, notice]);
+        await pool.execute(`insert into \`order\` VALUES (?,?,?,?,?, CURRENT_TIME, NULL, 'Confirm',?,?)`,[oid, id, voucher_id, payment_id, shipping_id, sum_price, notice]);
         let [[{order_id}]] = await pool.execute(`SELECT id as order_id FROM \`order\` ORDER BY id DESC LIMIT 1;`);
         order_detail.forEach(async element => {
             await pool.execute(`insert into order_detail VALUES (NULL,?,?,?)`, [order_id, element.product_id, element.count]);

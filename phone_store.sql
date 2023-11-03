@@ -1,3 +1,4 @@
+-- Active: 1698997751607@@127.0.0.1@3306@phone_store
 drop database `phone_store`;
 create database if not exists `phone_store`;
 use `phone_store`;
